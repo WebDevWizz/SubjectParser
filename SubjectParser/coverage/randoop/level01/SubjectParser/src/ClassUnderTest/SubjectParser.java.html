@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SubjectParser.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">randoop.level01 (15) (14 nov 2023 15:35:46)</a> &gt; <a href="../../index.html" class="el_group">SubjectParser</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">ClassUnderTest</a> &gt; <span class="el_source">SubjectParser.java</span></div><h1>SubjectParser.java</h1><pre class="source lang-java linenums">package ClassUnderTest;
+
+import java.util.StringTokenizer;
+
+public class SubjectParser {
+
+	private String Subject;
+	private String Title;
+	private String RangeString;
+	private int UpperRange;
+	private int LowerRange;
+
+<span class="fc" id="L13">	public SubjectParser(String s) {</span>
+<span class="fc" id="L14">		Subject = s;</span>
+<span class="fc" id="L15">		UpperRange = 1;</span>
+<span class="fc" id="L16">		LowerRange = 1;</span>
+<span class="fc" id="L17">	}</span>
+
+	public long getId() {
+		try {
+<span class="fc" id="L21">			StringTokenizer st = new StringTokenizer(Subject);</span>
+<span class="nc" id="L22">			return (Long.parseLong(st.nextToken()));</span>
+<span class="fc" id="L23">		} catch (Exception e) {</span>
+<span class="fc" id="L24">			return -1;</span>
+		}
+	}
+
+	public int getThisRange() {
+		try {
+<span class="fc" id="L30">			int[] parts = this.messageParts();</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">			if (parts != null) {</span>
+<span class="nc" id="L32">				LowerRange = parts[0];</span>
+			}
+<span class="nc" id="L34">		} catch (Exception e) {</span>
+		}
+<span class="fc" id="L36">		return LowerRange;</span>
+	}
+
+	public int getUpperRange() {
+		try {
+<span class="fc" id="L41">			int[] parts = this.messageParts();</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">			if (parts != null) {</span>
+<span class="nc" id="L43">				UpperRange = parts[1];</span>
+			}
+<span class="nc" id="L45">		} catch (Exception e) {</span>
+		}
+<span class="fc" id="L47">		return UpperRange;</span>
+	}
+
+
+	private int[] messageParts() {
+		try {
+<span class="fc" id="L53">			String mainrange = this.getRangeString();</span>
+<span class="fc" id="L54">			int low = -1;</span>
+<span class="fc" id="L55">			int high = -1;</span>
+			try {
+<span class="nc" id="L57">				String tmpRange = mainrange.substring(mainrange.lastIndexOf(&quot;(&quot;),</span>
+<span class="nc" id="L58">						mainrange.length());</span>
+<span class="nc" id="L59">				String range = tmpRange.substring(0, tmpRange.indexOf(&quot;)&quot;));</span>
+<span class="nc" id="L60">				StringTokenizer st = new StringTokenizer(range, &quot;/&quot;);</span>
+<span class="nc" id="L61">				String sLow = st.nextToken();</span>
+<span class="nc" id="L62">				String sHigh = st.nextToken();</span>
+<span class="nc" id="L63">				low = Integer.parseInt(sLow.substring(1, sLow.length()));</span>
+<span class="nc" id="L64">				high = Integer.parseInt(sHigh);</span>
+<span class="pc" id="L65">			} catch (Exception inte) {</span>
+				try {
+<span class="nc" id="L67">					String tmpRange2 = mainrange.substring(mainrange.lastIndexOf(&quot;[&quot;),</span>
+<span class="nc" id="L68">							mainrange.length());</span>
+<span class="nc" id="L69">					String range2 = tmpRange2.substring(0, tmpRange2.indexOf(&quot;]&quot;));</span>
+<span class="nc" id="L70">					StringTokenizer st2 = new StringTokenizer(range2, &quot;/&quot;);</span>
+<span class="nc" id="L71">					String sLow2 = st2.nextToken();</span>
+<span class="nc" id="L72">					String sHigh2 = st2.nextToken();</span>
+<span class="nc" id="L73">					low = Integer.parseInt(sLow2.substring(1, sLow2.length()));</span>
+<span class="nc" id="L74">					high = Integer.parseInt(sHigh2);</span>
+<span class="pc" id="L75">				} catch (Exception subE) {</span>
+<span class="fc" id="L76">					low = -1;</span>
+<span class="fc" id="L77">					high = -1;</span>
+<span class="fc" id="L78">					return null;</span>
+				}
+			}
+<span class="nc" id="L81">			int[] ia = new int[2];</span>
+<span class="nc" id="L82">			ia[0] = low;</span>
+<span class="nc" id="L83">			ia[1] = high;</span>
+<span class="nc" id="L84">			return ia;</span>
+<span class="nc" id="L85">		} catch (Exception e) {</span>
+<span class="nc" id="L86">			e.printStackTrace();</span>
+<span class="nc" id="L87">			return null;</span>
+		}
+	}
+
+	public String getRangeString() {
+		try {
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">			if (RangeString == null) {</span>
+<span class="fc" id="L94">				this.getTitle();</span>
+			}
+<span class="fc" id="L96">			return RangeString;</span>
+<span class="nc" id="L97">		} catch (Exception e) {</span>
+<span class="nc" id="L98">			System.err.println(e.getMessage());</span>
+<span class="nc" id="L99">			return null;</span>
+		}
+	}
+
+	public String getTitle() {
+		try {
+			char tokentype;
+<span class="fc" id="L106">			String tmpSubject = Subject.substring(Subject.indexOf(&quot; &quot;) + 1,</span>
+<span class="fc" id="L107">					Subject.length());</span>
+<span class="fc" id="L108">			StringBuffer sb = new StringBuffer();</span>
+<span class="fc" id="L109">			int startindex = 0;</span>
+<span class="fc" id="L110">			boolean FoundRange = false;</span>
+			MAINLOOP:
+<span class="fc bfc" id="L112" title="All 2 branches covered.">			for (int i = tmpSubject.length() - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L113">				char testchar = tmpSubject.charAt(i);</span>
+<span class="pc bpc" id="L114" title="4 of 6 branches missed.">				if ((testchar == ')' || testchar == ']') &amp;&amp; FoundRange == false) {</span>
+<span class="nc" id="L115">					StringBuffer tmpbuf = new StringBuffer();</span>
+<span class="nc" id="L116">					tmpbuf.insert(0, testchar);</span>
+<span class="nc" id="L117">					tokentype = testchar;</span>
+<span class="nc" id="L118">					startindex = i;</span>
+					char endchar;
+<span class="nc bnc" id="L120" title="All 2 branches missed.">					if (testchar == ')') endchar = '(';</span>
+<span class="nc" id="L121">					else endchar = '[';</span>
+					char nextchar;
+<span class="nc bnc" id="L123" title="All 2 branches missed.">					while ((nextchar = tmpSubject.charAt(--i)) != endchar) {</span>
+<span class="nc" id="L124">						tmpbuf.insert(0, nextchar);</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">						if ((Character.isDigit(nextchar) == false) &amp;&amp; nextchar != '/') {</span>
+<span class="nc" id="L126">							sb.insert(0, tmpbuf.toString());</span>
+<span class="nc" id="L127">							continue MAINLOOP;</span>
+						}
+					}
+<span class="nc" id="L130">					int endindex = -1;</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">					if (tmpbuf.toString().indexOf(&quot;/&quot;) != -1) {</span>
+<span class="nc" id="L132">						tmpbuf.insert(0, endchar);</span>
+<span class="nc" id="L133">						FoundRange = true;</span>
+<span class="nc" id="L134">						RangeString = tmpbuf.toString();</span>
+					}
+<span class="nc" id="L136">				} else {</span>
+<span class="fc" id="L137">					sb.insert(0, testchar);</span>
+				}
+			}
+<span class="fc" id="L140">			return sb.toString();</span>
+<span class="nc" id="L141">		} catch (Exception parseE) {</span>
+<span class="nc" id="L142">			parseE.printStackTrace();</span>
+<span class="nc" id="L143">			return null;</span>
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">			if (args.length &lt; 1) {</span>
+<span class="nc" id="L150">				System.out.println(&quot;Usage: java SubjectParser &lt;args&gt;&quot;);</span>
+<span class="nc" id="L151">				System.exit(1);</span>
+			}
+<span class="nc" id="L153">			StringBuffer sb = new StringBuffer(&quot;&quot;);</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">			for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="nc" id="L155">				sb.append(args[i] + &quot; &quot;);</span>
+			}
+<span class="nc" id="L157">			SubjectParser sp = new SubjectParser(sb.toString().trim());</span>
+<span class="nc" id="L158">			System.out.println(&quot;The upper range is &quot; + sp.getUpperRange());</span>
+<span class="nc" id="L159">			System.out.println(&quot;The lower range is &quot; + sp.getThisRange());</span>
+<span class="nc" id="L160">			System.out.println(&quot;The message id is &quot; + sp.getId());</span>
+<span class="nc" id="L161">			System.out.println(&quot;The subject title is &quot; + sp.getTitle());</span>
+<span class="nc" id="L162">		} catch (Exception e) {</span>
+<span class="nc" id="L163">			System.err.println(e.getMessage());</span>
+		}
+<span class="nc" id="L165">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span>randoop.level01 (15) (14 nov 2023 15:35:46)</div></body></html>
